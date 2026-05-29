@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Outfit', sans-serif;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(3, 0, 20, 0.5);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(92, 57, 184, 0.4);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(92, 57, 184, 0.7);
+}
+
+/* Background animated glow */
+@keyframes pulseGlow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.8;
+  }
+}
+
+.cosmic-glow-1 {
+  filter: blur(120px);
+  animation: pulseGlow 8s ease-in-out infinite alternate;
+}
+
+.cosmic-glow-2 {
+  filter: blur(120px);
+  animation: pulseGlow 12s ease-in-out infinite alternate-reverse;
+}
+
+/* Custom Glassmorphism */
+.glassmorphism {
+  background: rgba(10, 5, 37, 0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(132, 94, 247, 0.15);
+}
+
+.glassmorphism-card {
+  background: rgba(20, 12, 61, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(132, 94, 247, 0.1);
+}
