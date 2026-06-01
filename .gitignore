@@ -39,3 +39,10 @@ yarn-error.log*
 # OS
 .DS_Store
 Thumbs.db
+# ChromaDB / Vector DB
+backend/knowledge/.chroma/
+*.bin
+*.sqlite3
+
+# Eval outputs (optional - keep results local)
+eval/results.csv
