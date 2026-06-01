@@ -1,5 +1,6 @@
 # Python
 venv/
+backend/knowledge/.chroma/
 .venv/
 __pycache__/
 *.pyc
