@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ChatInterface from './components/ChatInterface';
 import { BirthDetailsForm, BirthDetailsSummary, type BirthDetails } from './components/BirthDetailsForm';
+import CelestialDashboard from './components/CelestialDashboard';
 import { Sparkles, Moon, Star } from 'lucide-react';
 
 export default function App() {
@@ -11,6 +12,8 @@ export default function App() {
     } catch { return null; }
   });
   const [showForm, setShowForm] = useState(!birthDetails);
+  const [computedChart, setComputedChart] = useState<any>(null);
+  const [computedTransits, setComputedTransits] = useState<any>(null);
 
   const handleBirthSubmit = (details: BirthDetails) => {
     setBirthDetails(details);
@@ -38,7 +41,7 @@ export default function App() {
       </div>
 
       {/* Main Container */}
-      <div className="w-full max-w-2xl z-10 flex flex-col items-center gap-4">
+      <div className={`w-full ${showForm ? 'max-w-2xl' : 'max-w-6xl'} z-10 flex flex-col items-center gap-4`}>
         {/* Title Brand Section */}
         <div className="text-center space-y-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/25 text-purple-300 text-xs font-mono tracking-wider">
@@ -61,7 +64,21 @@ export default function App() {
             {birthDetails && (
               <BirthDetailsSummary details={birthDetails} onEdit={handleEdit} />
             )}
-            <ChatInterface birthDetails={birthDetails} />
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full items-stretch">
+              <div className="lg:col-span-6 flex flex-col items-center justify-center">
+                <ChatInterface
+                  birthDetails={birthDetails}
+                  onChartComputed={setComputedChart}
+                  onTransitsComputed={setComputedTransits}
+                />
+              </div>
+              <div className="lg:col-span-6 flex flex-col">
+                <CelestialDashboard
+                  chart={computedChart}
+                  transits={computedTransits}
+                />
+              </div>
+            </div>
           </>
         )}
 

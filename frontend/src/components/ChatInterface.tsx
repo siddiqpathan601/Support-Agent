@@ -13,6 +13,8 @@ interface Message {
 
 interface ChatInterfaceProps {
   birthDetails: BirthDetails | null;
+  onChartComputed?: (chart: any) => void;
+  onTransitsComputed?: (transits: any) => void;
 }
 
 const STORAGE_KEY = 'astroagent_conversation';
@@ -45,13 +47,28 @@ function saveMessages(messages: Message[]) {
   }
 }
 
-export default function ChatInterface({ birthDetails }: ChatInterfaceProps) {
+export default function ChatInterface({ birthDetails, onChartComputed, onTransitsComputed }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>(loadMessages);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [streamingContent, setStreamingContent] = useState('');
   const [streamingToolCalls, setStreamingToolCalls] = useState<ToolCallEvent[]>([]);
   const [error, setError] = useState<string | null>(null);
+
+  // Sync historical chart/transits to dashboard on mount
+  useEffect(() => {
+    messages.forEach((m) => {
+      m.toolCalls?.forEach((tc) => {
+        if (tc.name === 'compute_birth_chart' && tc.output?.chart) {
+          onChartComputed?.(tc.output.chart);
+        }
+        if (tc.name === 'get_daily_transits' && tc.output) {
+          onTransitsComputed?.(tc.output);
+        }
+      });
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -106,6 +123,12 @@ export default function ChatInterface({ birthDetails }: ChatInterfaceProps) {
       // onToolCall
       (tool: ToolCallEvent) => {
         setStreamingToolCalls((prev) => [...prev, tool]);
+        if (tool.name === 'compute_birth_chart' && tool.output?.chart) {
+          onChartComputed?.(tool.output.chart);
+        }
+        if (tool.name === 'get_daily_transits' && tool.output) {
+          onTransitsComputed?.(tool.output);
+        }
       },
       // onToken
       (token: string) => {
@@ -154,6 +177,8 @@ export default function ChatInterface({ birthDetails }: ChatInterfaceProps) {
     setStreamingContent('');
     setStreamingToolCalls([]);
     setError(null);
+    onChartComputed?.(null);
+    onTransitsComputed?.(null);
   };
 
   return (

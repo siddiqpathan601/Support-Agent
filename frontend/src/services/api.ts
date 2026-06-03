@@ -18,6 +18,7 @@ export interface ToolCallEvent {
   name: string;
   input: Record<string, unknown>;
   output_summary: string;
+  output?: any;
   ms: number;
   error?: string | null;
 }

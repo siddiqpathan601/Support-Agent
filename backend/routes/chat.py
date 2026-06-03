@@ -118,6 +118,7 @@ async def stream_chat(request: ChatRequest):
                         "output_summary": _summarize_output(
                             entry.get("output", {})
                         ),
+                        "output": entry.get("output", {}),
                         "ms": entry.get("execution_time_ms", 0),
                         "error": entry.get("error"),
                     }
