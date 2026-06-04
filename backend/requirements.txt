@@ -1,14 +1,27 @@
+# ── Web Framework ──────────────────────────────────────────────────────────────
 fastapi>=0.100.0
 uvicorn>=0.22.0
+sse-starlette>=1.6.0
+
+# ── LangGraph + LangChain ──────────────────────────────────────────────────────
 langgraph>=0.0.10
 langchain>=0.1.0
 langchain-groq>=0.1.0
+
+# ── LLM Providers ──────────────────────────────────────────────────────────────
 groq>=0.4.0
+google-genai>=1.0.0          # optional: used only by eval tone judge
+
+# ── Astrology / Ephemeris ──────────────────────────────────────────────────────
+ephem>=4.1.0                 # PyEphem — real planetary positions (JPL data)
+
+# ── Geocoding ──────────────────────────────────────────────────────────────────
+geopy>=2.4.0                 # Nominatim / OpenStreetMap geocoding
+timezonefinder>=6.2.0        # Local timezone from lat/lon
+
+# ── Vector Database (RAG) ─────────────────────────────────────────────────────
+chromadb>=0.4.0              # Knowledge base embeddings
+
+# ── Utilities ─────────────────────────────────────────────────────────────────
 pydantic>=2.0.0
 python-dotenv>=1.0.0
-ephem>=4.1.0
-geopy>=2.4.0
-timezonefinder>=6.2.0
-chromadb>=0.4.0
-google-genai>=1.0.0
-sse-starlette>=1.6.0
