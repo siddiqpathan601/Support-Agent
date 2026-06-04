@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, Clock, MapPin, User, Sparkles, ChevronDown, ChevronUp, AlertCircle } from 'lucide-react';
+import { Calendar, Clock, MapPin, User, Sparkles, AlertCircle } from 'lucide-react';
 
 export interface BirthDetails {
   name: string;
@@ -55,19 +55,17 @@ export function BirthDetailsForm({ onSubmit }: BirthDetailsFormProps) {
   };
 
   return (
-    <div className="w-full max-w-2xl glassmorphism rounded-2xl overflow-hidden shadow-2xl relative">
-      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-50" />
-
+    <div className="w-full glassmorphism rounded-2xl overflow-hidden shadow-xl border border-slate-800/60 relative">
       {/* Header */}
-      <div className="px-6 py-5 bg-cosmic-900/60 border-b border-purple-500/15 text-center">
+      <div className="px-6 py-6 bg-slate-900/30 border-b border-slate-900/60 text-center">
         <div className="flex items-center justify-center gap-2 mb-2">
-          <Sparkles className="w-5 h-5 text-purple-400" />
-          <h2 className="text-lg font-semibold text-slate-100 tracking-wide">
-            Birth Details
+          <Sparkles className="w-4 h-4 text-amber-200" />
+          <h2 className="text-base font-medium text-slate-100 tracking-wide">
+            Casting Your Birth Chart
           </h2>
         </div>
         <p className="text-xs text-slate-400 font-light max-w-sm mx-auto">
-          Share your birth details so I can cast your celestial chart. All readings are for reflection and guidance.
+          Casting requires birth details to load planetary alignments from the ephemeris.
         </p>
       </div>
 
@@ -75,16 +73,16 @@ export function BirthDetailsForm({ onSubmit }: BirthDetailsFormProps) {
       <form onSubmit={handleSubmit} className="p-6 space-y-5">
         {/* Name */}
         <div>
-          <label className="flex items-center gap-2 text-xs text-purple-300 font-medium mb-1.5 uppercase tracking-wider">
-            <User className="w-3.5 h-3.5" /> Full Name
+          <label className="flex items-center gap-2 text-xs text-slate-400 font-medium mb-1.5 uppercase tracking-wider">
+            <User className="w-3.5 h-3.5 text-indigo-400" /> Name
           </label>
           <input
             id="birth-name"
             type="text"
             value={name}
             onChange={e => setName(e.target.value)}
-            placeholder="Your name"
-            className="w-full bg-cosmic-900/50 border border-purple-500/20 focus:border-purple-500/50 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 outline-none transition-all"
+            placeholder="e.g. Priya"
+            className="w-full bg-slate-950/40 border border-slate-800/80 focus:border-indigo-500/50 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-600 outline-none transition-all"
           />
           {errors.name && (
             <p className="mt-1 text-xs text-rose-400 flex items-center gap-1">
@@ -95,8 +93,8 @@ export function BirthDetailsForm({ onSubmit }: BirthDetailsFormProps) {
 
         {/* Date */}
         <div>
-          <label className="flex items-center gap-2 text-xs text-purple-300 font-medium mb-1.5 uppercase tracking-wider">
-            <Calendar className="w-3.5 h-3.5" /> Birth Date
+          <label className="flex items-center gap-2 text-xs text-slate-400 font-medium mb-1.5 uppercase tracking-wider">
+            <Calendar className="w-3.5 h-3.5 text-indigo-400" /> Birth Date
           </label>
           <input
             id="birth-date"
@@ -104,7 +102,7 @@ export function BirthDetailsForm({ onSubmit }: BirthDetailsFormProps) {
             value={date}
             onChange={e => setDate(e.target.value)}
             max={new Date().toISOString().split('T')[0]}
-            className="w-full bg-cosmic-900/50 border border-purple-500/20 focus:border-purple-500/50 rounded-xl px-4 py-3 text-sm text-slate-100 outline-none transition-all appearance-none [color-scheme:dark]"
+            className="w-full bg-slate-950/40 border border-slate-800/80 focus:border-indigo-500/50 rounded-xl px-4 py-3 text-sm text-slate-100 outline-none transition-all appearance-none [color-scheme:dark]"
           />
           {errors.date && (
             <p className="mt-1 text-xs text-rose-400 flex items-center gap-1">
@@ -115,8 +113,8 @@ export function BirthDetailsForm({ onSubmit }: BirthDetailsFormProps) {
 
         {/* Time */}
         <div>
-          <label className="flex items-center gap-2 text-xs text-purple-300 font-medium mb-1.5 uppercase tracking-wider">
-            <Clock className="w-3.5 h-3.5" /> Birth Time
+          <label className="flex items-center gap-2 text-xs text-slate-400 font-medium mb-1.5 uppercase tracking-wider">
+            <Clock className="w-3.5 h-3.5 text-indigo-400" /> Birth Time
           </label>
           <div className="flex items-center gap-3">
             <input
@@ -125,7 +123,7 @@ export function BirthDetailsForm({ onSubmit }: BirthDetailsFormProps) {
               value={unknownTime ? '' : time}
               onChange={e => setTime(e.target.value)}
               disabled={unknownTime}
-              className="flex-1 bg-cosmic-900/50 border border-purple-500/20 focus:border-purple-500/50 rounded-xl px-4 py-3 text-sm text-slate-100 outline-none transition-all disabled:opacity-40 [color-scheme:dark]"
+              className="flex-1 bg-slate-950/40 border border-slate-800/80 focus:border-indigo-500/50 rounded-xl px-4 py-3 text-sm text-slate-100 outline-none transition-all disabled:opacity-30 [color-scheme:dark]"
             />
           </div>
           <label className="flex items-center gap-2 mt-2 cursor-pointer select-none">
@@ -133,24 +131,24 @@ export function BirthDetailsForm({ onSubmit }: BirthDetailsFormProps) {
               type="checkbox"
               checked={unknownTime}
               onChange={e => setUnknownTime(e.target.checked)}
-              className="w-3.5 h-3.5 rounded border-purple-500/30 bg-cosmic-900/50 text-purple-500 focus:ring-purple-500/30"
+              className="w-3.5 h-3.5 rounded border-slate-800 bg-slate-950 text-indigo-600 focus:ring-indigo-500/30"
             />
-            <span className="text-xs text-slate-400">I don't know my birth time (defaults to 12:00 noon)</span>
+            <span className="text-xs text-slate-400">Time unknown (defaults to 12:00 noon)</span>
           </label>
         </div>
 
         {/* Place */}
         <div>
-          <label className="flex items-center gap-2 text-xs text-purple-300 font-medium mb-1.5 uppercase tracking-wider">
-            <MapPin className="w-3.5 h-3.5" /> Birth Place
+          <label className="flex items-center gap-2 text-xs text-slate-400 font-medium mb-1.5 uppercase tracking-wider">
+            <MapPin className="w-3.5 h-3.5 text-indigo-400" /> Birth Place
           </label>
           <input
             id="birth-place"
             type="text"
             value={place}
             onChange={e => setPlace(e.target.value)}
-            placeholder="City, Country"
-            className="w-full bg-cosmic-900/50 border border-purple-500/20 focus:border-purple-500/50 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 outline-none transition-all"
+            placeholder="e.g. Mumbai, India"
+            className="w-full bg-slate-950/40 border border-slate-800/80 focus:border-indigo-500/50 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-600 outline-none transition-all"
           />
           {errors.place && (
             <p className="mt-1 text-xs text-rose-400 flex items-center gap-1">
@@ -163,9 +161,9 @@ export function BirthDetailsForm({ onSubmit }: BirthDetailsFormProps) {
         <button
           id="submit-birth-details"
           type="submit"
-          className="w-full bg-gradient-to-r from-cosmic-600 to-purple-600 hover:from-cosmic-500 hover:to-purple-500 text-white py-3.5 rounded-xl font-medium text-sm tracking-wide shadow-lg hover:shadow-purple-500/20 transition-all duration-300 flex items-center justify-center gap-2"
+          className="w-full bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white py-3.5 rounded-xl font-medium text-xs tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-2 shadow-md hover:shadow-indigo-500/10"
         >
-          <Sparkles className="w-4 h-4" />
+          <Sparkles className="w-4 h-4 text-amber-200" />
           Cast My Chart
         </button>
       </form>
@@ -177,25 +175,25 @@ export function BirthDetailsForm({ onSubmit }: BirthDetailsFormProps) {
 
 export function BirthDetailsSummary({ details, onEdit }: BirthDetailsSummaryProps) {
   return (
-    <div className="w-full max-w-2xl glassmorphism-card rounded-xl px-4 py-2.5 flex items-center justify-between gap-3">
-      <div className="flex items-center gap-3 text-xs text-slate-300 overflow-hidden">
-        <Sparkles className="w-3.5 h-3.5 text-purple-400 flex-shrink-0" />
-        <span className="truncate">
-          <span className="text-purple-300 font-medium">{details.name}</span>
-          <span className="mx-1.5 text-slate-600">·</span>
-          <span>{details.date}</span>
-          <span className="mx-1.5 text-slate-600">·</span>
-          <span>{details.time}</span>
-          <span className="mx-1.5 text-slate-600">·</span>
-          <span>{details.place}</span>
+    <div className="w-full max-w-6xl glassmorphism rounded-xl px-5 py-3 flex items-center justify-between gap-4 border border-slate-800/50 shadow-md">
+      <div className="flex items-center gap-2.5 text-xs text-slate-300 overflow-hidden">
+        <Sparkles className="w-3.5 h-3.5 text-amber-200 flex-shrink-0" />
+        <span className="truncate tracking-wide">
+          Chart active: <span className="text-amber-100 font-medium">{details.name}</span>
+          <span className="mx-2 text-slate-700">|</span>
+          <span className="text-slate-400">{details.date}</span>
+          <span className="mx-2 text-slate-700">|</span>
+          <span className="text-slate-400">{details.time}</span>
+          <span className="mx-2 text-slate-700">|</span>
+          <span className="text-slate-400">{details.place}</span>
         </span>
       </div>
       <button
         id="edit-birth-details"
         onClick={onEdit}
-        className="text-xs text-purple-400 hover:text-purple-300 font-medium whitespace-nowrap transition-colors"
+        className="text-[10px] text-amber-200/80 hover:text-amber-100 hover:underline tracking-wider uppercase font-medium whitespace-nowrap transition-all"
       >
-        Edit
+        Edit details
       </button>
     </div>
   );

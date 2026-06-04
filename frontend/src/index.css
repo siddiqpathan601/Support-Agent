@@ -5,57 +5,84 @@
 @layer base {
   body {
     font-family: 'Outfit', sans-serif;
+    background-color: #030014;
+    color: #e2e8f0;
   }
 }
 
-/* Custom Scrollbar */
+/* Elegant Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(3, 0, 20, 0.5);
+  background: rgba(2, 0, 15, 0.4);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(92, 57, 184, 0.4);
+  background: rgba(124, 58, 237, 0.2);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(92, 57, 184, 0.7);
+  background: rgba(124, 58, 237, 0.5);
 }
 
-/* Background animated glow */
+/* Background animated glow - very subtle and deep */
 @keyframes pulseGlow {
   0%, 100% {
-    transform: scale(1);
-    opacity: 0.5;
+    transform: scale(1) translate(0, 0);
+    opacity: 0.3;
   }
   50% {
-    transform: scale(1.15);
-    opacity: 0.8;
+    transform: scale(1.1) translate(5%, 5%);
+    opacity: 0.55;
   }
 }
 
 .cosmic-glow-1 {
-  filter: blur(120px);
-  animation: pulseGlow 8s ease-in-out infinite alternate;
+  filter: blur(140px);
+  animation: pulseGlow 15s ease-in-out infinite alternate;
 }
 
 .cosmic-glow-2 {
-  filter: blur(120px);
-  animation: pulseGlow 12s ease-in-out infinite alternate-reverse;
+  filter: blur(140px);
+  animation: pulseGlow 20s ease-in-out infinite alternate-reverse;
 }
 
-/* Custom Glassmorphism */
+/* Custom Message Entry Animation */
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-message {
+  animation: messageSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Custom Glassmorphism - Cleaner and Thinner Border */
 .glassmorphism {
-  background: rgba(10, 5, 37, 0.4);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(132, 94, 247, 0.15);
+  background: rgba(7, 4, 30, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(139, 92, 246, 0.08);
 }
 
 .glassmorphism-card {
-  background: rgba(20, 12, 61, 0.35);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(132, 94, 247, 0.1);
+  background: rgba(15, 10, 50, 0.3);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(139, 92, 246, 0.05);
+}
+
+/* Gold Glow Accent Hover */
+.gold-border-hover {
+  transition: all 0.3s ease;
+}
+.gold-border-hover:hover {
+  border-color: rgba(251, 191, 36, 0.25);
+  box-shadow: 0 0 15px rgba(251, 191, 36, 0.05);
 }

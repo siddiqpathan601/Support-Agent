@@ -24,54 +24,56 @@ export default function App() {
   const handleEdit = () => setShowForm(true);
 
   return (
-    <div className="relative min-h-screen bg-[#030014] text-slate-100 flex flex-col items-center justify-center p-4 overflow-hidden">
-      {/* Dynamic Cosmic Glow Effects */}
-      <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-cosmic-800/20 cosmic-glow-1 pointer-events-none" />
-      <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full bg-purple-900/15 cosmic-glow-2 pointer-events-none" />
+    <div className="relative min-h-screen bg-[#02000f] text-slate-100 flex flex-col items-center justify-start p-4 md:p-8 overflow-y-auto">
+      {/* Soft, Calming Cosmic Background Glows */}
+      <div className="absolute top-[-30%] left-[-20%] w-[800px] h-[800px] rounded-full bg-indigo-950/20 cosmic-glow-1 pointer-events-none" />
+      <div className="absolute bottom-[-30%] right-[-20%] w-[800px] h-[800px] rounded-full bg-purple-950/20 cosmic-glow-2 pointer-events-none" />
 
-      {/* Decorative Stars */}
-      <div className="absolute top-1/4 left-1/12 text-purple-500/20 animate-pulse pointer-events-none">
-        <Star className="w-6 h-6" />
+      {/* Decorative Star Accents - Extremely subtle */}
+      <div className="absolute top-[15%] left-[8%] text-amber-200/10 animate-pulse pointer-events-none">
+        <Star className="w-5 h-5 fill-current" />
       </div>
-      <div className="absolute bottom-1/4 right-1/12 text-cosmic-400/20 animate-pulse pointer-events-none" style={{ animationDelay: '2s' }}>
-        <Star className="w-4 h-4" />
+      <div className="absolute bottom-[20%] right-[10%] text-indigo-400/10 animate-pulse pointer-events-none" style={{ animationDelay: '3s' }}>
+        <Star className="w-4 h-4 fill-current" />
       </div>
-      <div className="absolute top-[15%] right-[15%] text-purple-400/35 animate-bounce pointer-events-none" style={{ animationDuration: '6s' }}>
-        <Sparkles className="w-5 h-5" />
+      <div className="absolute top-[25%] right-[12%] text-amber-200/15 animate-bounce pointer-events-none" style={{ animationDuration: '8s' }}>
+        <Sparkles className="w-4 h-4" />
       </div>
 
-      {/* Main Container */}
-      <div className={`w-full ${showForm ? 'max-w-2xl' : 'max-w-6xl'} z-10 flex flex-col items-center gap-4`}>
-        {/* Title Brand Section */}
-        <div className="text-center space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/25 text-purple-300 text-xs font-mono tracking-wider">
-            <Moon className="w-3.5 h-3.5" />
-            <span>ARADHANA · ASTRO COMPANION</span>
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-100 via-purple-300 to-slate-200">
-            AstroAgent
-          </h1>
-          <p className="text-sm md:text-base text-slate-400 font-light max-w-md mx-auto">
-            Your celestial AI companion — powered by real ephemeris data and Gemini.
-          </p>
+      {/* Header Space */}
+      <header className="w-full max-w-6xl z-10 flex flex-col items-center gap-2 mb-6 mt-4">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/60 border border-indigo-500/10 text-indigo-300 text-[10px] font-mono tracking-widest uppercase">
+          <Moon className="w-3 h-3 text-amber-200/80" />
+          <span>Aradhana Astro Companion</span>
         </div>
+        <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-slate-100 mt-2 font-sans">
+          Astro<span className="text-amber-200/90 font-light">Agent</span>
+        </h1>
+        <p className="text-xs text-slate-400 font-light text-center max-w-sm">
+          A stateful AI astrologer companion powered by true planetary calculation & LangGraph.
+        </p>
+      </header>
 
-        {/* Birth Details Section */}
+      {/* Main Layout Container */}
+      <main className={`w-full ${showForm ? 'max-w-xl' : 'max-w-6xl'} z-10 flex-1 flex flex-col items-center justify-center gap-6`}>
         {showForm ? (
           <BirthDetailsForm onSubmit={handleBirthSubmit} />
         ) : (
-          <>
+          <div className="w-full flex flex-col gap-6">
             {birthDetails && (
               <BirthDetailsSummary details={birthDetails} onEdit={handleEdit} />
             )}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full items-stretch">
-              <div className="lg:col-span-6 flex flex-col items-center justify-center">
+              {/* Chat Area (Left Side) */}
+              <div className="lg:col-span-6 flex flex-col">
                 <ChatInterface
                   birthDetails={birthDetails}
                   onChartComputed={setComputedChart}
                   onTransitsComputed={setComputedTransits}
                 />
               </div>
+              
+              {/* Right Panel (Planetary positions / transits) */}
               <div className="lg:col-span-6 flex flex-col">
                 <CelestialDashboard
                   chart={computedChart}
@@ -79,16 +81,16 @@ export default function App() {
                 />
               </div>
             </div>
-          </>
+          </div>
         )}
+      </main>
 
-        {/* Footer */}
-        <div className="text-center">
-          <p className="text-xs text-slate-500 font-mono">
-            Readings are for reflection and guidance, not certainty. · Aradhana Take-Home
-          </p>
-        </div>
-      </div>
+      {/* Footer */}
+      <footer className="w-full max-w-6xl z-10 mt-8 mb-2 text-center border-t border-slate-900/60 pt-4">
+        <p className="text-[10px] text-slate-500 font-mono tracking-wide">
+          All calculations are mathematical models. Framework details are for introspection and guidance, never prediction.
+        </p>
+      </footer>
     </div>
   );
 }
