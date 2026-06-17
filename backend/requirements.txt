@@ -2,26 +2,58 @@
 fastapi>=0.100.0
 uvicorn>=0.22.0
 sse-starlette>=1.6.0
+python-multipart>=0.0.6
+
+# ── WebSockets / Real-time ──────────────────────────────────────────────────────
+python-socketio>=5.10.0
+websockets>=12.0
 
 # ── LangGraph + LangChain ──────────────────────────────────────────────────────
 langgraph>=0.0.10
 langchain>=0.1.0
 langchain-groq>=0.1.0
+langchain-community>=0.0.20
 
 # ── LLM Providers ──────────────────────────────────────────────────────────────
 groq>=0.4.0
 google-genai>=1.0.0          # optional: used only by eval tone judge
+langchain-openai>=0.1.0      # xAI Grok via OpenAI-compatible API
 
-# ── Astrology / Ephemeris ──────────────────────────────────────────────────────
-ephem>=4.1.0                 # PyEphem — real planetary positions (JPL data)
+# ── Database / ORM ────────────────────────────────────────────────────────────
+sqlalchemy>=2.0.0
+alembic>=1.13.0
+asyncpg>=0.29.0              # Neon PostgreSQL async driver
+psycopg2-binary>=2.9.0       # Neon PostgreSQL sync driver (Alembic)
+aiosqlite>=0.20.0            # async SQLite driver for local dev
 
-# ── Geocoding ──────────────────────────────────────────────────────────────────
-geopy>=2.4.0                 # Nominatim / OpenStreetMap geocoding
-timezonefinder>=6.2.0        # Local timezone from lat/lon
+# ── Authentication ────────────────────────────────────────────────────────────
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
 
 # ── Vector Database (RAG) ─────────────────────────────────────────────────────
-chromadb>=0.4.0              # Knowledge base embeddings
+chromadb>=0.4.0              # Phase 1: local ChromaDB
+qdrant-client>=1.7.0         # Phase 2+: Qdrant Cloud
+
+# ── Embeddings ────────────────────────────────────────────────────────────────
+sentence-transformers>=2.6.0
+
+# ── Document Processing ────────────────────────────────────────────────────────
+pypdf2>=3.0.0
+python-docx>=1.1.0
+aiofiles>=23.2.1
+
+# ── Task Queue ────────────────────────────────────────────────────────────────
+celery>=5.3.0
+redis>=5.0.0
+
+# ── Astrology / Ephemeris (kept for backward compat) ──────────────────────────
+ephem>=4.1.0
+
+# ── Geocoding (kept for backward compat) ──────────────────────────────────────
+geopy>=2.4.0
+timezonefinder>=6.2.0
 
 # ── Utilities ─────────────────────────────────────────────────────────────────
 pydantic>=2.0.0
 python-dotenv>=1.0.0
+httpx>=0.27.0
