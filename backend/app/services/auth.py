@@ -20,17 +20,29 @@ from backend.app.models.db import get_db
 from backend.app.models.user import User
 from backend.config import JWT_SECRET, JWT_ALGORITHM, JWT_EXPIRE_MINUTES
 
+import bcrypt
+
 # ── Password hashing ──────────────────────────────────────────────────────────
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 bearer_scheme = HTTPBearer()
 
 
 def hash_password(plain: str) -> str:
-    return pwd_context.hash(plain)
+    # Hash a password using bcrypt
+    password_bytes = plain.encode("utf-8")
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(password_bytes, salt)
+    return hashed.decode("utf-8")
 
 
 def verify_password(plain: str, hashed: str) -> bool:
-    return pwd_context.verify(plain, hashed)
+    # Verify a password using bcrypt
+    try:
+        password_bytes = plain.encode("utf-8")
+        hashed_bytes = hashed.encode("utf-8")
+        return bcrypt.checkpw(password_bytes, hashed_bytes)
+    except Exception:
+        return False
+
 
 
 # ── JWT ───────────────────────────────────────────────────────────────────────

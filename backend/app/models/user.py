@@ -28,4 +28,5 @@ class User(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Relationships
-    conversations = relationship("Conversation", back_populates="user", lazy="select")
+    conversations = relationship("Conversation", back_populates="user", lazy="select", foreign_keys="[Conversation.user_id]")
+
