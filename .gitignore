@@ -44,6 +44,8 @@ yarn-error.log*
 Thumbs.db
 # ChromaDB / Vector DB
 backend/knowledge/.chroma/
+knowledge/.chroma_support/
+knowledge/.chroma/
 *.bin
 *.sqlite3
 
