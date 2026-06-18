@@ -48,7 +48,7 @@ export default function ChatPage() {
   const [streamContent, setStreamContent] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const typingTimer = useRef<NodeJS.Timeout>();
+  const typingTimer = useRef<NodeJS.Timeout | undefined>(undefined);
 
   useEffect(() => {
     if (!isAuthenticated) router.replace("/login");
