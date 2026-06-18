@@ -211,6 +211,10 @@ async def stream_chat(
     db: Session = Depends(get_db),
 ):
     """Stream the agent pipeline result as Server-Sent Events."""
+    # Rate limit: 20 messages per minute per user
+    allowed = await rate_limit_check(f"chat:{current_user.id}", limit=20, window=60)
+    if not allowed:
+        raise HTTPException(status_code=429, detail="Too many requests. Please wait a moment.")
 
     async def event_generator():
         try:
@@ -227,56 +231,70 @@ async def stream_chat(
                 resolution_attempts=int(convo.resolution_attempts or 0),
             )
 
-            # Stream graph events
-            async for event in support_graph.astream_events(initial_state, version="v1"):
-                kind = event.get("event")
-                name = event.get("name", "")
-
-                # Emit agent progress events
-                if kind == "on_chain_start" and "agent" in name.lower():
-                    yield f"data: {json.dumps({'agent_start': name})}\n\n"
-
-                elif kind == "on_chain_end" and "agent" in name.lower():
-                    output = event.get("data", {}).get("output", {})
-                    if isinstance(output, dict):
-                        tool_info = {
-                            k: v for k, v in output.items()
-                            if k in ["intent", "confidence", "sentiment", "ticket_id", "should_escalate"]
-                        }
-                        if tool_info:
-                            yield f"data: {json.dumps({'agent_output': name, 'data': tool_info})}\n\n"
-
-            # Run full pipeline to get final result for DB persistence
+            # Run full pipeline exactly once to get final result for DB persistence & streaming
             result = await support_graph.ainvoke(initial_state)
             final_response = result.get("final_response") or "I'm sorry, I couldn't process your request."
+            intent = result.get("intent")
+            confidence = result.get("confidence")
+            should_escalate = result.get("should_escalate", False)
+            ticket_id = result.get("ticket_id")
+            ticket_meta = result.get("_ticket_meta")
 
-            # Stream the final response token by token
-            from langchain_groq import ChatGroq
-            from langchain_core.messages import SystemMessage, HumanMessage
-            from backend.config import GROQ_API_KEY, GROQ_MODEL
-
-            llm = ChatGroq(model=GROQ_MODEL, temperature=0.7, api_key=GROQ_API_KEY)
-
-            # Stream the pre-generated final response character-by-character (simulated streaming)
-            # In production, use llm.astream() directly with context
+            # Stream the final response token by token (snappy character-by-character style)
             words = final_response.split(" ")
             import asyncio
             for i, word in enumerate(words):
                 token = word + (" " if i < len(words) - 1 else "")
                 yield f"data: {json.dumps({'token': token})}\n\n"
-                await asyncio.sleep(0.02)
+                await asyncio.sleep(0.015)
 
-            # Persist and emit done
+            # Persist agent response
             _save_message(db, convo.id, MessageSender.AGENT, final_response,
-                         intent=result.get("intent"), confidence=result.get("confidence"))
+                         intent=intent, confidence=confidence)
 
+            # Update conversation status
             convo.sentiment_score = result.get("sentiment_score")
-            convo.confidence_score = result.get("confidence")
-            if result.get("should_escalate"):
+            convo.confidence_score = confidence
+            if should_escalate:
                 convo.status = ConversationStatus.ESCALATED
+                convo.resolution_attempts = str(int(convo.resolution_attempts or 0) + 1)
+            else:
+                convo.resolution_attempts = str(int(convo.resolution_attempts or 0) + 1)
+
+            # Create ticket in DB if escalated
+            if should_escalate and ticket_meta and not db.query(Ticket).filter(
+                Ticket.conversation_id == convo.id
+            ).first():
+                category_val = ticket_meta.get("category", "general")
+                priority_val = ticket_meta.get("priority", "medium")
+
+                # Safely map to enum values
+                cat_map = {c.value: c for c in TicketCategory}
+                pri_map = {p.value: p for p in TicketPriority}
+
+                ticket = Ticket(
+                    id=ticket_meta["ticket_id"],
+                    conversation_id=convo.id,
+                    user_id=current_user.id,
+                    title=f"Support Request: {intent or 'General'} - {current_user.email}",
+                    summary=ticket_meta.get("summary"),
+                    category=cat_map.get(category_val, TicketCategory.GENERAL),
+                    priority=pri_map.get(priority_val, TicketPriority.MEDIUM),
+                    status=TicketStatus.OPEN,
+                    escalation_reason=ticket_meta.get("escalation_reason"),
+                )
+                db.add(ticket)
+
             db.commit()
 
-            yield f"data: {json.dumps({'done': True, 'conversation_id': convo.id, 'intent': result.get('intent'), 'escalated': result.get('should_escalate', False), 'ticket_id': result.get('ticket_id'), 'suggested_replies': result.get('suggested_replies', [])})}\n\n"
+            # Cache updated conversation history in Redis (1 hour TTL)
+            updated_history = history + [
+                {"role": "user", "content": request.message},
+                {"role": "assistant", "content": final_response},
+            ]
+            await cache_conversation(convo.id, {"messages": updated_history})
+
+            yield f"data: {json.dumps({'done': True, 'conversation_id': convo.id, 'intent': intent, 'escalated': should_escalate, 'ticket_id': ticket_id, 'suggested_replies': result.get('suggested_replies', [])})}\n\n"
 
         except Exception as e:
             yield f"data: {json.dumps({'error': str(e)})}\n\n"

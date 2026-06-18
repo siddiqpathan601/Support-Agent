@@ -66,8 +66,10 @@ if __name__ == "__main__":
 
     if len(sys.argv) < 2:
         print("\n--- Running Default Seeding ---")
-        # Automatically seed the personal admin account
-        seed_user("support@company.com", "Support Admin", "Admin123", "support")
+        # Automatically seed the three roles
+        seed_user("admin@company.com", "Default Admin", "Password123", "admin")
+        seed_user("support@company.com", "Default Support", "Password123", "support")
+        seed_user("customer@company.com", "Default Customer", "Password123", "customer")
         
         list_users()
         print("\nUsage for manual seeding:")

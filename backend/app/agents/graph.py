@@ -33,9 +33,9 @@ def route_after_sentiment(
     - Immediately escalate (low confidence, security, angry customer)
     """
     if state.get("should_escalate"):
-        print("[SupportGraph] Routing → ESCALATE")
+        print("[SupportGraph] Routing -> ESCALATE")
         return "escalation_agent_node"
-    print("[SupportGraph] Routing → RESOLVE")
+    print("[SupportGraph] Routing -> RESOLVE")
     return "knowledge_agent_node"
 
 
@@ -97,6 +97,7 @@ def build_initial_state(
         escalation_reason=None,
         ticket_id=None,
         ticket_summary=None,
+        _ticket_meta=None,
         final_response=None,
         suggested_replies=[],
         tool_history=[],

@@ -38,6 +38,7 @@ class SupportState(TypedDict):
     escalation_reason: Optional[str]
     ticket_id: Optional[str]
     ticket_summary: Optional[str]
+    _ticket_meta: Optional[Dict[str, Any]]
 
     # ── Final response ─────────────────────────────────────────────────────────
     final_response: Optional[str]
