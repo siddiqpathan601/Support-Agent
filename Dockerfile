@@ -39,11 +39,10 @@ COPY --from=frontend-builder /app/frontend/ ./frontend/
 
 # Copy deployment configurations
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY start.sh ./start.sh
+COPY start.py ./start.py
 
 # Ensure non-root user (UID 1000) owns all application files and Nginx run paths
 RUN chown -R user:user /app /var/log/nginx /var/lib/nginx /etc/nginx /run
-RUN chmod +x ./start.sh
 
 # Switch to non-root user
 USER user
@@ -53,4 +52,4 @@ ENV PATH="/home/user/.local/bin:$PATH"
 EXPOSE 7860
 
 # Run startup script
-CMD ["./start.sh"]
+CMD ["python", "start.py"]
