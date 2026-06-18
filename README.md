@@ -1,3 +1,13 @@
+---
+title: Support-Agent
+emoji: 🎫
+colorFrom: indigo
+colorTo: purple
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # SupportAI ✦ Autonomous Customer Support Agent
 
 A state-of-the-art, AI-powered customer support platform. It combines a **multi-agent LangGraph pipeline** with a **real-time human agent takeover system** via Socket.IO. The platform automatically resolves customer inquiries using a document RAG knowledge base, analyzes customer sentiment, and escalates conversations to human support staff when necessary.

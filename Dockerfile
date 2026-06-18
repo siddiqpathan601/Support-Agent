@@ -15,6 +15,9 @@ RUN cd frontend && npm run build
 FROM python:3.11-slim
 WORKDIR /app
 
+# Create non-root user for Hugging Face Spaces compatibility
+RUN useradd -m -u 1000 user
+
 # Install Node.js, Nginx, and system dependencies
 RUN apt-get update && apt-get install -y \
     curl \
@@ -37,7 +40,14 @@ COPY --from=frontend-builder /app/frontend/ ./frontend/
 # Copy deployment configurations
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY start.sh ./start.sh
+
+# Ensure non-root user (UID 1000) owns all application files and Nginx run paths
+RUN chown -R user:user /app /var/log/nginx /var/lib/nginx /etc/nginx /run
 RUN chmod +x ./start.sh
+
+# Switch to non-root user
+USER user
+ENV PATH="/home/user/.local/bin:$PATH"
 
 # Expose port (Hugging Face default is 7860, but Koyeb/others use dynamic PORT env var)
 EXPOSE 7860
