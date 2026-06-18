@@ -107,8 +107,8 @@ export default function ChatPage() {
       setStreaming(true);
       setStreamContent("");
 
-      const token = localStorage.getItem("support_token");
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/v1/chat/stream`, {
+      const token = typeof window !== "undefined" ? localStorage.getItem("support_token") : null;
+      const response = await fetch(chatApi.streamUrl(), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
