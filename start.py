@@ -46,10 +46,10 @@ def main():
         nginx_proc = subprocess.Popen(["nginx", "-g", "daemon off;"])
         processes.append(nginx_proc)
 
-        # 4. Start FastAPI backend (forced to local port 8000 to avoid host port collisions)
-        print("[StartScript] Launching FastAPI backend on internal port 8000...")
+        # 4. Start FastAPI backend (forced to local port 8081 to avoid host port collisions)
+        print("[StartScript] Launching FastAPI backend on internal port 8081...")
         backend_env = os.environ.copy()
-        backend_env["PORT"] = "8000"
+        backend_env["PORT"] = "8081"
         backend_proc = subprocess.Popen(
             [sys.executable, "-m", "backend.main"],
             env=backend_env
