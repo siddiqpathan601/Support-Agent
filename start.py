@@ -21,8 +21,13 @@ signal.signal(signal.SIGTERM, cleanup)
 
 def main():
     try:
-        # 1. Fetch the target port (defaulting to Hugging Face Spaces standard 7860)
-        target_port = os.getenv("PORT", "7860").strip()
+        # 1. Fetch the target port. Force to 7860 on Hugging Face Spaces to match app_port metadata
+        if "SPACE_ID" in os.environ or "SPACE_REPO_NAME" in os.environ:
+            print("[StartScript] Hugging Face Spaces environment detected. Forcing port to 7860.")
+            target_port = "7860"
+        else:
+            target_port = os.getenv("PORT", "7860").strip()
+        
         print(f"[StartScript] Target deployment port resolved: {target_port}")
 
         # 2. Update Nginx configuration file
